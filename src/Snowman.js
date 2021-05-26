@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import "./Snowman.css";
+import {ENGLISH_WORDS , randomWord } from "./words";
 import img0 from "./0.png";
 import img1 from "./1.png";
 import img2 from "./2.png";
@@ -28,7 +29,7 @@ function Snowman(props) {
 
   const [nWrong, setNWrong] = useState(0);
   const [guessed, setGuessed] = useState(new Set());
-  const [answer, setAnswer] = useState((props.words)[0]);
+  const [answer, setAnswer] = useState(randomWord(props.words));
 
   /** guessedWord: show current-state of word:
    if guessed letters are {a,p,e}, show "app_e" for "apple"
@@ -55,6 +56,9 @@ function Snowman(props) {
     setNWrong(n => n + (answer.includes(ltr) ? 0 : 1));
   }
 
+  /** checks if max wrong has been reached for current game */
+  let isMaxWrong = (nWrong === props.maxWrong)
+
   /** generateButtons: return array of letter buttons to render */
   function generateButtons() {
     return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
@@ -76,7 +80,14 @@ function Snowman(props) {
         <img src={(props.images)[nWrong]} alt={nWrong} />
         <p> Number wrong: {nWrong}</p>
         <p className="Snowman-word">{guessedWord()}</p>
-        <p className="Snowman-buttons">{generateButtons()}</p>
+        {/* Checks if the max number of wrong guesses reached,
+          if it has, then shows "you lose", otherwise, 
+          renders list of letters as buttons */}
+        { isMaxWrong ? (
+          <p>you lose</p>
+        ) : (
+          <p className="Snowman-buttons">{generateButtons()}</p>
+        )}
       </div>
   );
 }
@@ -84,7 +95,7 @@ function Snowman(props) {
 Snowman.defaultProps = {
   maxWrong: 6,
   images: [img0, img1, img2, img3, img4, img5, img6],
-  words: ["apple"],
+  words: ENGLISH_WORDS,
 };
 
 

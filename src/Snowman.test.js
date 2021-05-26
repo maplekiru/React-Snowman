@@ -8,13 +8,13 @@ it("renders Snowman without crashing", function () {
 });
 
 it("matched snapshot of Snowman", function () {
-  const { container } = render(<Snowman />);
+  const { container } = render(<Snowman words={["apple"]}/>);
   expect(container).toMatchSnapshot();
 });
 
 it("After max wrong # of guesses do not show button and show 'you lose'",
   function () {
-    const { container } = render(<Snowman />);
+    const { container } = render(<Snowman words={["apple"]} />);
     
     const letterB = container.querySelector("#b");
     fireEvent.click(letterB);
@@ -33,8 +33,7 @@ it("After max wrong # of guesses do not show button and show 'you lose'",
       container.querySelector('.Snowman-buttons')
     ).not.toBeInTheDocument();
     expect(container).toContainHTML("you lose");
-
+    expect(container).toMatchSnapshot();
 
   });
-
 
